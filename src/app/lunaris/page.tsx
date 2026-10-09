@@ -1,7 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, CalendarDays, ChevronDown, Database, Info, Menu, Moon, Mountain, RadioTower, ShieldAlert, Sun, X } from 'lucide-react';
 import { MetricKey, metricDefinitions, sites } from '@/lib/sites';
 const MoonViewer = dynamic(() => import('@/components/MoonViewer'), { ssr: false, loading: () => <div className="viewer-loading">Initializing lunar viewport…</div> });
@@ -17,10 +17,12 @@ export default function Home() {
   const [selectedId, setSelectedId] = useState(sites[0].id); const [compareId, setCompareId] = useState(sites[1].id); const [menuOpen, setMenuOpen] = useState(false); const [analysisRun, setAnalysisRun] = useState(false);
   const [mapMode,setMapMode]=useState(true);
   const [settingsOpen,setSettingsOpen]=useState(false);
+  const simulationResultsRef = useRef<HTMLElement>(null);
   const [start, setStart] = useState('2026-11-01'); const [end, setEnd] = useState('2026-11-08');
   const selected = useMemo(() => sites.find((site) => site.id === selectedId) ?? sites[0], [selectedId]);
   const compared = useMemo(() => sites.find((site) => site.id === compareId) ?? sites[1], [compareId]);
   const validDates = Boolean(start && end && (Date.parse(end)-Date.parse(start))/86400000 >= 1 && (Date.parse(end)-Date.parse(start))/86400000 <= 60);
+  useEffect(() => { if (analysisRun && validDates) simulationResultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, [analysisRun, validDates]);
   const exportComparison = async () => {
     const {downloadReport}=await import('@/lib/pdf-report');
     downloadReport('Lunar site comparison','lunaris-site-comparison',[
@@ -46,10 +48,11 @@ export default function Home() {
           <div className="field-grid"><div><label htmlFor="mission-start">Mission start</label><input id="mission-start" type="date" value={start} onChange={(event) => { setStart(event.target.value); setAnalysisRun(false); }} /></div><div><label htmlFor="mission-end">Mission end</label><input id="mission-end" type="date" value={end} min={start} onChange={(event) => { setEnd(event.target.value); setAnalysisRun(false); }} /></div></div>
           <div className="notice"><ShieldAlert size={18} /><p><b>Try a mission simulation.</b> Explore illustrative Sun and Earth windows using NASA historical averages and simple periodic math. No downloads or live service needed.</p></div>
           {!validDates && <p role="alert" className="date-error">Choose dates spanning 1–60 days.</p>}<button className="run-button" disabled={!validDates} onClick={() => setAnalysisRun(true)}><CalendarDays size={18} /> Run simulation <ArrowRight size={18} /></button>
-          {analysisRun && validDates && <Simulation key={selectedId+start+end} site={selected} start={start} end={end}/>}
           <div className="site-source"><span>{selected.pgdaProduct}</span><a href={selected.sourceUrl} target="_blank" rel="noreferrer">Coordinate source ↗</a></div>
         </div></aside>
       </section>
+
+      {analysisRun && validDates && <section ref={simulationResultsRef} id="simulation-results" className="simulation-results" aria-label="Simulation results"><Simulation key={selectedId+start+end} site={selected} start={start} end={end}/></section>}
 
       <section className="science-section" aria-labelledby="science-heading"><div className="section-heading"><div><p className="section-index">02 / SCIENTIFIC DASHBOARD</p><h2 id="science-heading">Evidence, with its limits visible</h2></div><p>NASA-derived 1 km neighborhood medians. Historical averages remain distinct from mission-date predictions.</p></div>
         <div className="metric-grid">{(Object.keys(metricDefinitions) as MetricKey[]).map((key) => <MetricCard key={key} metricKey={key} site={selected} />)}</div>
