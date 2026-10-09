@@ -1,6 +1,6 @@
 # Polar map and illustrative simulation
 
-Updated 2026-10-09. `/terrain` now defaults to a coordinate-referenced NASA polar map. The original 3D terrain and Moon remain in the adjacent tab.
+Updated 2026-10-09. `/lunaris` now defaults to a coordinate-referenced NASA polar map. The original 3D terrain and Moon remain in the adjacent tab.
 
 ## Map
 
