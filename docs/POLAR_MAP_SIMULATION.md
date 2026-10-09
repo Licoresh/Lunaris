@@ -12,7 +12,7 @@ Controls: drag/touch pan, wheel or +/- zoom, arrow-key pan, layer picker, grid t
 
 ## Simulation
 
-The disabled analysis notice was replaced with Run simulation. It accepts 1–60 days, samples hourly, works offline, has a time slider and obstruction slider, and exports labeled JSON. The existing homepage Horizons planner remains a separate live geometry tool.
+The disabled analysis notice was replaced with Run simulation. It accepts 1–60 days, samples hourly, works offline, has a time slider and obstruction slider, and exports labeled JSON. The live NASA/JPL Horizons planner is available separately at `/missions`.
 
 For a historical fraction f, h(t)=A*(sin(2*pi*t/P+phase)-cos(pi*f)). This yields fraction f above zero over a complete cycle. Solar P=29.53 days/A=5 degrees; Earth P=27.32 days/A=7 degrees. January 1 2026 is an arbitrary epoch. Longitude offsets and amplitudes are illustrative. NASA site historical medians supply f. These curves are NOT actual Sun/Earth ephemerides or observed elevations. Selected dates merely index a repeatable scenario. No terrain, physical power, real libration, radio links or eclipse model is claimed. Horizon crossings use linear interpolation between hourly samples.
 
@@ -24,7 +24,7 @@ Removed disposable texture preview, obsolete page backup, one-off wiring script 
 
 ## Checks
 
-26 tests passed, including raster coordinate agreement, projection round trips, date bounds, horizon interpolation and obstruction monotonicity. TypeScript, source ESLint and production build passed. Browser checks exercised simulation execution/time/obstruction controls and elevation-layer focus. See latest completion notes in TEST_REPORT.md.
+27 tests passed, including raster coordinate agreement, projection round trips, date bounds, horizon interpolation and obstruction monotonicity. TypeScript, ESLint and production build passed. Browser checks exercised simulation execution/time/obstruction controls and elevation-layer focus. See latest completion notes in TEST_REPORT.md.
 
 
 October 2026 exploration update: the map region picker adds NASA PGDA product 78 Site06 (Nobile Rim 1), Site07 (Peak near Shackleton), and Site11 (de Gerlache Rim). Both elevation and slope are downloaded by scripts/download_exploration.py and rendered by scripts/build_polar_map.py. Region navigation focuses raster bounds, not a certified landing coordinate. These map-only regions do not change the three comparison/simulation reference sites. Mission Control is top-aligned and sticky on desktop; narrow layouts place a collapsible panel before the map.

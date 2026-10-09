@@ -1,32 +1,48 @@
-# LUNARIS — lunar planning and CLPS mission browser
+# LUNARIS
 
-Next.js / React / TypeScript / Three.js application. The default Site & Date Planner compares NASA/JPL Horizons Sun/Earth geometry at three published south-polar research points. The CLPS catalog contains five missions and 28 instrument/payload entries. Existing NASA terrain tools remain at `/terrain`.
+LUNARIS is an educational lunar south-pole mission-planning browser built for the NASA Space Apps challenge. The challenge asks teams to compare candidate landing sites and dates while considering sunlight, terrain and direct-to-Earth communication. LUNARIS brings terrain layers, site summaries and sky-geometry tools into one interface, while labeling assumptions and data gaps.
 
-## Run
+## Features
+
+- Interactive south-polar map with historical sunlight and Earth-visibility layers, plus elevation and slope previews for six areas: Connecting Ridge, Shackleton Rim, Nobile Rim 1, Peak near Shackleton, de Gerlache Rim and Malapert Massif.
+- Map pan, zoom, layer selection, coverage exploration and 3D terrain views where regional models are available.
+- Site comparisons and an illustrative Sun/Earth window simulation. Simulation dates select a repeatable educational scenario; they are not date-specific ephemerides or forecasts.
+- CLPS mission catalog, details, timeline, payload explorer, comparison and a NASA/JPL date-planning panel at [`/missions`](http://localhost:3000/missions). The planner retrieves live Horizons geometry for approximate research reference points when the server has internet access.
+- PDF exports for comparison and simulation reports.
+
+## Run locally
+
+Requirements: Node.js 22 or newer. Python 3.10+ and the packages in `scripts/requirements.txt` are needed only to regenerate map previews.
+
 ```powershell
 npm install
 npm run dev
 ```
-Open http://localhost:3000. Production: `npm run build`, then `npm start`. Requires Node.js 22+ and network access to NASA/JPL for new planner requests. The planner requires a Next.js server runtime; a static-only host cannot serve `/api/ephemeris`.
+
+Open [http://localhost:3000](http://localhost:3000). The root redirects to the south-polar explorer. Use `/missions` for the CLPS catalog and live geometry planner. The planner requires a running Next.js server and network access to NASA/JPL Horizons; the map and illustrative simulation use bundled outputs and work offline.
+
+For a production build, run `npm run build` followed by `npm start`.
+
+## Data and attribution
+
+- Elevation and slope previews are derived from NASA Goddard Planetary Geology, Geophysics and Geochemistry Laboratory (PGDA) [product 78](https://pgda.gsfc.nasa.gov/products/78), LRO/LOLA 5 m/pixel regional rasters. Six site pairs are in the local `data/nasa/terrain/` folder. Raw rasters are excluded from Git because of their size. Checked-in PNG previews and manifests support the app and can be regenerated with `python scripts/build_polar_map.py`.
+- Historical illumination and Earth-visibility layers use NASA PGDA [product 69](https://pgda.gsfc.nasa.gov/products/69), at 120 m/pixel. These are long-term modeled averages, not predictions for a selected date. Source rasters are local under `data/nasa/illumination/` and `data/nasa/earth-visibility/` and are excluded from Git.
+- The `/missions` planner requests Sun and Earth apparent geometry from [NASA/JPL Horizons](https://ssd.jpl.nasa.gov/horizons/). It uses approximate published research-site coordinates and a reference-sphere observer height. Its output does not include local terrain horizons, power-system performance or operational communication link budgets.
+- CLPS mission records include source links in each mission brief. Coordinates and outcomes are shown only where cited sources support them.
+- The 3D overview Moon is the RenderX model from [Sketchfab](https://sketchfab.com/3d-models/moon-26cc0b7878bb4d919b68e2be399db466), used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). NASA datasets and imagery retain their respective source-team credits. LUNARIS is an independent educational project and is not affiliated with NASA.
+
+## Demo
+
+Start with the default polar map, switch through its four layers and choose a terrain coverage region. Use **Focus site** or open a site's 3D terrain where available. Inspect the site comparison and illustrative simulation, including its method and limits. Visit `/missions` to explore CLPS records and, with network access, compare two research sites or date intervals using live Horizons data. See [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md), [`docs/POLAR_MAP_SIMULATION.md`](docs/POLAR_MAP_SIMULATION.md) and [`docs/PLANNER_METHOD.md`](docs/PLANNER_METHOD.md) for walkthroughs and scientific limits.
 
 ## Checks
-`npm test` (27 tests), `npm run science:test` (3 Python checks), `npm run typecheck`, `npx eslint src`, `npm run build`.
-`node scripts/inspect-moon.mjs` audits the original GLB without modifying it.
-`node scripts/check-planner.mjs` checks the running API against NASA and saves reference responses.
 
-## Actual data sources
-- Twelve NASA LOLA 5 m/pixel elevation/slope GeoTIFFs: Site01, Site04, Site06, Site07, Site11, and Site23, PGDA product 78. Terrain uncertainty rasters are not included.
-- NASA 120 m/pixel long-term solar illumination and Earth visibility GeoTIFFs: PGDA product 69. Used for 1 km neighborhood median statistics, not selected-date predictions.
-- Date planner: live NASA/JPL Horizons airless apparent Sun/Earth center azimuth/elevation. No local SPICE kernels. Hourly sampling; linear crossing estimates; 0 km reference-sphere observer height.
-- CLPS facts: official NASA source links per mission, with LROC primary observations for IM-1 coordinates.
-- Moon: original RenderX Sketchfab `src/moon.glb`, copied byte-for-byte to `public/models/moon.glb`; source retained as recoverable backup. CC BY 4.0 attribution appears in the UI. No replacement sphere.
+```powershell
+npm test
+npm run science:test
+npm run typecheck
+npm run lint
+npm run build
+```
 
-See `docs/CLPS_DATA_REVIEW.md`, `docs/MOON_MODEL.md`, `docs/PLANNER_METHOD.md` and `docs/TEST_REPORT.md`.
-
-## Scientific limits
-The Moon now has landmark-calibrated overview pins and geographic focus; its artistic mesh is not survey-grade. Date geometry is not terrain-aware illumination, electrical power or operational radio prediction. The constant obstruction mask is an assumption for sensitivity exploration. Historical raster metrics remain separate. Independent scientific validation remains required.
-
-
-## Polar map and educational simulation
-
-`/terrain` defaults to the NASA polar map with pan, zoom, four layer choices and site focus. Run simulation produces an offline illustrative scenario from NASA historical averages and sine-wave math; it is not an actual date forecast. See `docs/POLAR_MAP_SIMULATION.md`. Regenerate map assets with `python scripts/build_polar_map.py` (Rasterio, NumPy, Pillow). The suite currently contains 27 tests.
+See [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) for source status, [`docs/CLPS_DATA_REVIEW.md`](docs/CLPS_DATA_REVIEW.md) for catalog methodology, and [`NASA_ASSETS_STATUS.md`](NASA_ASSETS_STATUS.md) for the local raster inventory.

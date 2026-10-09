@@ -12,4 +12,4 @@ Unmodeled: azimuth-dependent ridge/crater horizon, actual observer terrain eleva
 
 NASA methodology: https://ssd.jpl.nasa.gov/horizons/manual.html and https://ssd-api.jpl.nasa.gov/doc/horizons.html.
 
-Local data status: four Site01/Site04 terrain rasters plus solar/Earth visibility averages are present. Terrain uncertainty and Site23 rasters are absent. The local SPICE folder contains only a README. Future validated terrain horizons should be derived from adequate regional elevation coverage with documented frame and observer-height transformations.
+Local data status: six Site01/Site04/Site06/Site07/Site11/Site23 elevation-and-slope pairs and two PGDA historical-average rasters are present under `data/nasa`; these raw files are excluded from Git. Terrain uncertainty products are not included. The local SPICE folder contains only its README. The `/missions` planner obtains date geometry from NASA/JPL Horizons and does not use local SPICE kernels. Future validated terrain horizons should be derived from adequate regional elevation coverage with documented frame and observer-height transformations.
