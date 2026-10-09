@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-09T03:42:52.848065+00:00",
+  "coordinateConvention": "selenographic latitude; positive-east longitude 0-360",
+  "method": "1 km circular neighborhood median around approximate NASA/TM-2007-215025 research points",
+  "sites": {
+    "connecting-ridge": {
+      "latitude": -89.4,
+      "longitude": 233.0,
+      "metrics": {
+        "illumination": {
+          "value": 11.71,
+          "min": 0.0,
+          "max": 30.2,
+          "unit": "%",
+          "validPixels": 217,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 120.0,
+          "projectedCenterMeters": [
+            -14530.515,
+            -10949.529
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/illumination/AVGVISIB_75S_120M_201608.TIF",
+          "sha256": "d539467f16ccc5f51b6a904af6be5d16c9b2f194afe619b9f1f81841d9fec0bb",
+          "status": "nasa-derived"
+        },
+        "earthVisibility": {
+          "value": 52.48,
+          "min": 29.83,
+          "max": 57.35,
+          "unit": "%",
+          "validPixels": 217,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 120.0,
+          "projectedCenterMeters": [
+            -14530.515,
+            -10949.529
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/earth-visibility/AVGVISIB_75S_120M_201608_EARTH.TIF",
+          "sha256": "5355a015b3cd71602ac6a130bfd1d596465f14ebbaedb6e5919c5dc34984d4f8",
+          "status": "nasa-derived"
+        },
+        "elevation": {
+          "value": 1224.6,
+          "min": 1118.87,
+          "max": 1391.89,
+          "unit": "m",
+          "validPixels": 125668,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 5.0,
+          "projectedCenterMeters": [
+            -14530.515,
+            -10949.529
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/terrain/Site01_final_adj_5mpp_surf.tif",
+          "sha256": "3ba7b97cb00a2bcf21189c3aeb535f65afc21207154ab9f0d43c5bdc1f7e747e",
+          "status": "nasa-derived"
+        },
+        "slope": {
+          "value": 8.01,
+          "min": 0.03,
+          "max": 34.07,
+          "unit": "\u00b0",
+          "validPixels": 125668,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 5.0,
+          "projectedCenterMeters": [
+            -14530.515,
+            -10949.529
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/terrain/Site01_final_adj_5mpp_slp.tif",
+          "sha256": "3a90035a4946b4a04b7332c52f0b2b1cff71648bd8c105e14d8a7e15c6bcfe8e",
+          "status": "nasa-derived"
+        }
+      }
+    },
+    "shackleton-rim": {
+      "latitude": -89.8,
+      "longitude": 213.0,
+      "metrics": {
+        "illumination": {
+          "value": 39.02,
+          "min": 0.0,
+          "max": 78.02,
+          "unit": "%",
+          "validPixels": 219,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 120.0,
+          "projectedCenterMeters": [
+            -3303.059,
+            -5086.265
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/illumination/AVGVISIB_75S_120M_201608.TIF",
+          "sha256": "d539467f16ccc5f51b6a904af6be5d16c9b2f194afe619b9f1f81841d9fec0bb",
+          "status": "nasa-derived"
+        },
+        "earthVisibility": {
+          "value": 56.29,
+          "min": 0.0,
+          "max": 56.68,
+          "unit": "%",
+          "validPixels": 219,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 120.0,
+          "projectedCenterMeters": [
+            -3303.059,
+            -5086.265
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/earth-visibility/AVGVISIB_75S_120M_201608_EARTH.TIF",
+          "sha256": "5355a015b3cd71602ac6a130bfd1d596465f14ebbaedb6e5919c5dc34984d4f8",
+          "status": "nasa-derived"
+        },
+        "elevation": {
+          "value": 1544.72,
+          "min": 1282.88,
+          "max": 1732.98,
+          "unit": "m",
+          "validPixels": 125663,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 5.0,
+          "projectedCenterMeters": [
+            -3303.059,
+            -5086.265
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/terrain/Site04_final_adj_5mpp_surf.tif",
+          "sha256": "38ff70dbdf2f066c2cfa94a646c3a59d653ce7f6b4528b15fc1b43ee397ce758",
+          "status": "nasa-derived"
+        },
+        "slope": {
+          "value": 13.86,
+          "min": 0.2,
+          "max": 51.79,
+          "unit": "\u00b0",
+          "validPixels": 125663,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 5.0,
+          "projectedCenterMeters": [
+            -3303.059,
+            -5086.265
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/terrain/Site04_final_adj_5mpp_slp.tif",
+          "sha256": "ec3cfa184b114d95aff498e7452764a8569737ae829e7ff3efd38d5187182579",
+          "status": "nasa-derived"
+        }
+      }
+    },
+    "malapert-massif": {
+      "latitude": -86.0,
+      "longitude": 4.0,
+      "metrics": {
+        "illumination": {
+          "value": 44.43,
+          "min": 35.12,
+          "max": 66.93,
+          "unit": "%",
+          "validPixels": 220,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 120.0,
+          "projectedCenterMeters": [
+            8464.438,
+            121047.105
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/illumination/AVGVISIB_75S_120M_201608.TIF",
+          "sha256": "d539467f16ccc5f51b6a904af6be5d16c9b2f194afe619b9f1f81841d9fec0bb",
+          "status": "nasa-derived"
+        },
+        "earthVisibility": {
+          "value": 100.0,
+          "min": 58.01,
+          "max": 100.0,
+          "unit": "%",
+          "validPixels": 220,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 120.0,
+          "projectedCenterMeters": [
+            8464.438,
+            121047.105
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/earth-visibility/AVGVISIB_75S_120M_201608_EARTH.TIF",
+          "sha256": "5355a015b3cd71602ac6a130bfd1d596465f14ebbaedb6e5919c5dc34984d4f8",
+          "status": "nasa-derived"
+        },
+        "elevation": {
+          "value": 4922.25,
+          "min": 4567.31,
+          "max": 5103.87,
+          "unit": "m",
+          "validPixels": 125670,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 5.0,
+          "projectedCenterMeters": [
+            8464.438,
+            121047.105
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/terrain/Site23_final_adj_5mpp_surf.tif",
+          "sha256": "12d280a59cd7580415f6bada638d0abe025ce6727541fddf68d5dc371a6c94cf",
+          "status": "nasa-derived"
+        },
+        "slope": {
+          "value": 15.7,
+          "min": 0.21,
+          "max": 58.14,
+          "unit": "\u00b0",
+          "validPixels": 125670,
+          "radiusMeters": 1000.0,
+          "resolutionMeters": 5.0,
+          "projectedCenterMeters": [
+            8464.438,
+            121047.105
+          ],
+          "method": "circular-neighborhood-median",
+          "sourceFile": "data/nasa/terrain/Site23_final_adj_5mpp_slp.tif",
+          "sha256": "e2b41c65a9c9044d359f634e706b71fa187dbe7d9f271d5410cbd81d68eadb91",
+          "status": "nasa-derived"
+        }
+      }
+    }
+  }
+}

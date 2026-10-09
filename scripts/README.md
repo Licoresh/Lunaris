@@ -1,0 +1,1 @@
+The legacy Windows NASA downloader is included in scripts/nasa-download-kit/ for convenience. Its direct data URLs are NOT verified live. If it fails, use docs/DATA_SOURCES.md, download manually and put sources under data/nasa and public/models. Do not execute scripts unless you trust and inspect their URLs.

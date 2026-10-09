@@ -1,0 +1,240 @@
+[
+  {
+    "id": "AVGVISIB_75S_120M_201608_EARTH",
+    "kind": "earth",
+    "url": "/maps/AVGVISIB_75S_120M_201608_EARTH.png",
+    "bounds": [
+      -457440.0,
+      -457440.0,
+      457440.0,
+      457440.0
+    ],
+    "sourceResolution": 120.0,
+    "displayResolution": 595.625,
+    "min": 0,
+    "max": 100,
+    "source": "data/nasa/earth-visibility/AVGVISIB_75S_120M_201608_EARTH.TIF",
+    "sha256": "5355a015b3cd71602ac6a130bfd1d596465f14ebbaedb6e5919c5dc34984d4f8"
+  },
+  {
+    "id": "AVGVISIB_75S_120M_201608",
+    "kind": "sun",
+    "url": "/maps/AVGVISIB_75S_120M_201608.png",
+    "bounds": [
+      -457440.0,
+      -457440.0,
+      457440.0,
+      457440.0
+    ],
+    "sourceResolution": 120.0,
+    "displayResolution": 595.625,
+    "min": 0,
+    "max": 100,
+    "source": "data/nasa/illumination/AVGVISIB_75S_120M_201608.TIF",
+    "sha256": "d539467f16ccc5f51b6a904af6be5d16c9b2f194afe619b9f1f81841d9fec0bb"
+  },
+  {
+    "id": "Site01_final_adj_5mpp_slp",
+    "kind": "slope",
+    "url": "/maps/Site01_final_adj_5mpp_slp.png",
+    "bounds": [
+      -19000.0,
+      -20000.0,
+      -3000.0,
+      -4000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 20.0,
+    "min": 0,
+    "max": 45,
+    "source": "data/nasa/terrain/Site01_final_adj_5mpp_slp.tif",
+    "sha256": "3a90035a4946b4a04b7332c52f0b2b1cff71648bd8c105e14d8a7e15c6bcfe8e"
+  },
+  {
+    "id": "Site01_final_adj_5mpp_surf",
+    "kind": "elevation",
+    "url": "/maps/Site01_final_adj_5mpp_surf.png",
+    "bounds": [
+      -19000.0,
+      -20000.0,
+      -3000.0,
+      -4000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 20.0,
+    "min": -3000,
+    "max": 6000,
+    "source": "data/nasa/terrain/Site01_final_adj_5mpp_surf.tif",
+    "sha256": "3ba7b97cb00a2bcf21189c3aeb535f65afc21207154ab9f0d43c5bdc1f7e747e"
+  },
+  {
+    "id": "Site04_final_adj_5mpp_slp",
+    "kind": "slope",
+    "url": "/maps/Site04_final_adj_5mpp_slp.png",
+    "bounds": [
+      -9000.0,
+      -15000.0,
+      7000.0,
+      1000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 20.0,
+    "min": 0,
+    "max": 45,
+    "source": "data/nasa/terrain/Site04_final_adj_5mpp_slp.tif",
+    "sha256": "ec3cfa184b114d95aff498e7452764a8569737ae829e7ff3efd38d5187182579"
+  },
+  {
+    "id": "Site04_final_adj_5mpp_surf",
+    "kind": "elevation",
+    "url": "/maps/Site04_final_adj_5mpp_surf.png",
+    "bounds": [
+      -9000.0,
+      -15000.0,
+      7000.0,
+      1000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 20.0,
+    "min": -3000,
+    "max": 6000,
+    "source": "data/nasa/terrain/Site04_final_adj_5mpp_surf.tif",
+    "sha256": "38ff70dbdf2f066c2cfa94a646c3a59d653ce7f6b4528b15fc1b43ee397ce758"
+  },
+  {
+    "id": "Site06_final_adj_5mpp_slp",
+    "kind": "slope",
+    "url": "/maps/Site06_final_adj_5mpp_slp.png",
+    "bounds": [
+      74000.0,
+      100000.0,
+      94000.0,
+      120000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 25.0,
+    "min": 0,
+    "max": 45,
+    "source": "data/nasa/terrain/Site06_final_adj_5mpp_slp.tif",
+    "sha256": "47db26dc18aa8f253a7d281ccf86189bb8dfd2b33b8a5b7c20586e4877c24e0c"
+  },
+  {
+    "id": "Site06_final_adj_5mpp_surf",
+    "kind": "elevation",
+    "url": "/maps/Site06_final_adj_5mpp_surf.png",
+    "bounds": [
+      74000.0,
+      100000.0,
+      94000.0,
+      120000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 25.0,
+    "min": -3000,
+    "max": 6000,
+    "source": "data/nasa/terrain/Site06_final_adj_5mpp_surf.tif",
+    "sha256": "cca17e8067601dd659b583f889204db6bce685bc30c60a9e62427a8bce36b03d"
+  },
+  {
+    "id": "Site07_final_adj_5mpp_slp",
+    "kind": "slope",
+    "url": "/maps/Site07_final_adj_5mpp_slp.png",
+    "bounds": [
+      22000.0,
+      -28000.0,
+      38000.0,
+      -12000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 20.0,
+    "min": 0,
+    "max": 45,
+    "source": "data/nasa/terrain/Site07_final_adj_5mpp_slp.tif",
+    "sha256": "febfe1bf19087f537bba2f7854d40ac83adadba5003f2585b1685cbd90d02219"
+  },
+  {
+    "id": "Site07_final_adj_5mpp_surf",
+    "kind": "elevation",
+    "url": "/maps/Site07_final_adj_5mpp_surf.png",
+    "bounds": [
+      22000.0,
+      -28000.0,
+      38000.0,
+      -12000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 20.0,
+    "min": -3000,
+    "max": 6000,
+    "source": "data/nasa/terrain/Site07_final_adj_5mpp_surf.tif",
+    "sha256": "38aaee10bb4da4d63e7427aa1ca25c79bdbc649d212079a04990e135462091f8"
+  },
+  {
+    "id": "Site11_final_adj_5mpp_slp",
+    "kind": "slope",
+    "url": "/maps/Site11_final_adj_5mpp_slp.png",
+    "bounds": [
+      -45000.0,
+      7000.0,
+      -29000.0,
+      23000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 20.0,
+    "min": 0,
+    "max": 45,
+    "source": "data/nasa/terrain/Site11_final_adj_5mpp_slp.tif",
+    "sha256": "c7f3eca389cf323e276955ed8e77b3eb870c576f4adf6b481014a1de6a403e23"
+  },
+  {
+    "id": "Site11_final_adj_5mpp_surf",
+    "kind": "elevation",
+    "url": "/maps/Site11_final_adj_5mpp_surf.png",
+    "bounds": [
+      -45000.0,
+      7000.0,
+      -29000.0,
+      23000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 20.0,
+    "min": -3000,
+    "max": 6000,
+    "source": "data/nasa/terrain/Site11_final_adj_5mpp_surf.tif",
+    "sha256": "58f3372c35bbd6baf38ffd5633c1c96b59bd89dbd252150581d12893a43136e5"
+  },
+  {
+    "id": "Site23_final_adj_5mpp_slp",
+    "kind": "slope",
+    "url": "/maps/Site23_final_adj_5mpp_slp.png",
+    "bounds": [
+      -11000.0,
+      111000.0,
+      10000.0,
+      132000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 26.25,
+    "min": 0,
+    "max": 45,
+    "source": "data/nasa/terrain/Site23_final_adj_5mpp_slp.tif",
+    "sha256": "e2b41c65a9c9044d359f634e706b71fa187dbe7d9f271d5410cbd81d68eadb91"
+  },
+  {
+    "id": "Site23_final_adj_5mpp_surf",
+    "kind": "elevation",
+    "url": "/maps/Site23_final_adj_5mpp_surf.png",
+    "bounds": [
+      -11000.0,
+      111000.0,
+      10000.0,
+      132000.0
+    ],
+    "sourceResolution": 5.0,
+    "displayResolution": 26.25,
+    "min": -3000,
+    "max": 6000,
+    "source": "data/nasa/terrain/Site23_final_adj_5mpp_surf.tif",
+    "sha256": "12d280a59cd7580415f6bada638d0abe025ce6727541fddf68d5dc371a6c94cf"
+  }
+]

@@ -1,0 +1,11 @@
+# Implementation checklist — 2026-10-08
+- [x] Inspect framework, source, science resources and original GLB.
+- [x] Repair undefined functions and preserve terrain route.
+- [x] Original Moon integration, embedded texture, normalization, controls and attribution.
+- [x] NASA-sourced mission catalog, search, filters, details, timeline, payloads and comparison.
+- [x] Clearly withhold unverified geographic positions.
+- [ ] Calibrate GLB geography, then implement/validate accurate markers and geographic focus. Blocked by missing control evidence.
+- [x] Add challenge-focused NASA/JPL site/date geometric planning comparison.
+- [ ] Terrain-aware horizon, power and operational communications model; independent scientific validation.
+- [x] Production build, 21 unit tests, 3 science checks and core browser flows.
+- [x] Document exact limitations and run commands.

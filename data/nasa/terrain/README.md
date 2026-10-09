@@ -1,0 +1,1 @@
+Put officially downloaded LOLA DEM and slope TIFF files here. Files are not bundled and may be large. Verify exact names and metadata.

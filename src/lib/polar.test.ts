@@ -1,0 +1,10 @@
+import {it,expect} from 'vitest';
+import {polarPoint,polarCoordinate} from './polar';
+import {simulate,simulationStats} from './simulation';
+import {sites} from './sites';
+it('projects the south pole and east-positive axes correctly',()=>{expect(polarPoint(-90,0)).toEqual({x:0,y:-0});expect(polarPoint(-86,0).y).toBeLessThan(0);expect(polarPoint(-86,90).x).toBeGreaterThan(0);for(const s of sites){const p=polarPoint(s.latitude,s.longitude),r=polarCoordinate(p.x,p.y);expect(r.latitude).toBeCloseTo(s.latitude,8);expect(r.longitude).toBeCloseTo(s.longitude,8)}});
+it('agrees with NASA raster projected reference points',()=>{const p=polarPoint(-89.8,213);expect(p.x).toBeCloseTo(-3303.059,2);expect(p.y).toBeCloseTo(5086.265,2)});
+it('bounds simulation requests and makes horizon obstruction monotonic',()=>{expect(()=>simulate(sites[0],'2026-11-01','2026-11-01')).toThrow();expect(()=>simulate(sites[0],'','')).toThrow();expect(()=>simulate(sites[0],'2026-01-01','2026-12-01')).toThrow();const s=simulate(sites[0],'2026-11-01','2026-12-01');expect(s).toHaveLength(721);for(const body of ['sun','earth'] as const){const a=simulationStats(s,body,0),b=simulationStats(s,body,5);expect(a.hours).toBeGreaterThanOrEqual(b.hours);expect(a.percent).toBeGreaterThanOrEqual(0);expect(a.percent).toBeLessThanOrEqual(100);expect(a.longest).toBeLessThanOrEqual(a.hours)}});
+it('linearly interpolates a simulated horizon crossing',()=>{const samples=[{time:'',sun:-1,earth:1},{time:'',sun:1,earth:1}];expect(simulationStats(samples,'sun',0).hours).toBe(.5);expect(simulationStats(samples,'earth',0).hours).toBe(1)});
+import {constrainMap} from './polar';
+it('keeps zoom and pan inside raster bounds',()=>{for(const bounds of [[-320000,-320000,320000,320000],[-19000,-20000,-3000,-4000]])for(const v of [{x:1e9,y:-1e9,span:1e9},{x:-1e9,y:1e9,span:4000}]){const c=constrainMap(v,bounds);expect(c.x-c.span/2).toBeGreaterThanOrEqual(bounds[0]);expect(c.x+c.span/2).toBeLessThanOrEqual(bounds[2]);expect(c.y-c.span/2).toBeGreaterThanOrEqual(-bounds[3]);expect(c.y+c.span/2).toBeLessThanOrEqual(-bounds[1])}});

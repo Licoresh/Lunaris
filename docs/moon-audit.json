@@ -1,0 +1,59 @@
+{
+  "sha256": "8cd444d1f739701c769b226c9be8afa13b452e71c4e5280ae6ab2f51721f4c70",
+  "bytes": 35644060,
+  "asset": {
+    "extras": {
+      "author": "RenderX (https://sketchfab.com/RenderX)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/moon-26cc0b7878bb4d919b68e2be399db466",
+      "title": "moon"
+    },
+    "generator": "Sketchfab-15.16.0",
+    "version": "2.0"
+  },
+  "bounds": {
+    "min": [
+      -0.9983409081181925,
+      -0.9991261088041605,
+      -0.9980973795809045
+    ],
+    "max": [
+      0.9983382984533183,
+      0.9991279874039903,
+      0.9980959407896196
+    ],
+    "center": [
+      -0.0000013048324370990017,
+      9.392999149038239e-7,
+      -7.193956424456083e-7
+    ],
+    "dimensions": [
+      1.9966792065715109,
+      1.998254096208151,
+      1.9961933203705242
+    ],
+    "normalizationScale": 1.000873714606747
+  },
+  "vertices": 272118,
+  "triangles": 520192,
+  "texture": {
+    "width": 8192,
+    "height": 4096,
+    "compressedBytes": 20678656,
+    "colorSpace": "srgb"
+  },
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Material.001",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.805531103175454
+      }
+    }
+  ],
+  "geographicAlignment": "landmark-calibrated overview; see MOON_MODEL.md"
+}

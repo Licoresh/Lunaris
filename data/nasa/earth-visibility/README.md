@@ -1,0 +1,1 @@
+Put verified NASA average Earth visibility raster(s) here. Confirm the exact product before using.

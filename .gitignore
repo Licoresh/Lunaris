@@ -1,0 +1,17 @@
+.next/
+node_modules/
+.env*
+!.env.example
+out/
+*.log
+.DS_Store
+*.tsbuildinfo
+data/nasa/**/*.tif
+data/nasa/**/*.TIF
+data/nasa/**/*.img
+data/nasa/**/*.cub
+data/nasa/**/*.bsp
+NASA_DOWNLOAD_REPORT.txt
+public/models/*.glb
+!public/models/moon.glb
+!public/models/.gitkeep
