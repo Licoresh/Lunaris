@@ -1,1 +1,0 @@
-Put verified NASA lunar illumination raster(s) here. Do not treat average products as date-specific.

@@ -1,6 +1,6 @@
 # LUNARIS
 
-LUNARIS is an educational lunar south-pole mission-planning browser built for the NASA Space Apps challenge. The challenge asks teams to compare candidate landing sites and dates while considering sunlight, terrain and direct-to-Earth communication. LUNARIS brings terrain layers, site summaries and sky-geometry tools into one interface, while labeling assumptions and data gaps.
+LUNARIS is an educational lunar south-pole terrain explorer built for the NASA Space Apps challenge. It brings NASA-derived map layers, site comparisons, 3D terrain views and an illustrative Sun/Earth simulation into one interface, with data limits shown alongside the results.
 
 ## Features
 
@@ -42,4 +42,4 @@ npm run lint
 npm run build
 ```
 
-See [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) for source status and [`NASA_ASSETS_STATUS.md`](NASA_ASSETS_STATUS.md) for the local raster inventory.
+See [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) for data sources, local raster inventory and scientific limits.

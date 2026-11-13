@@ -1,6 +1,6 @@
 # Moon model alignment and evidence
 
-Updated 2026-10-08. The original `src/moon.glb` and `public/models/moon.glb` remain byte-identical, SHA256 `8cd444d1f739701c769b226c9be8afa13b452e71c4e5280ae6ab2f51721f4c70`. No binary, geometry, material or texture modification was applied. Runtime still only centers and uniformly scales the authored scene.
+The original `src/moon.glb` and `public/models/moon.glb` remain byte-identical, SHA256 `8cd444d1f739701c769b226c9be8afa13b452e71c4e5280ae6ab2f51721f4c70`. No binary, geometry, material or texture modification was applied. Runtime still only centers and uniformly scales the authored scene.
 
 ## Resolved display alignment
 
@@ -24,9 +24,9 @@ GLTF image UV origin is the top left. Therefore u = wrapped(lon + 180)/360 and v
 
 Pins normally interpolate the actual mesh triangle containing the requested UV coordinate. Polar triangle fans leave small uncovered UV wedges (including the Shackleton Rim reference point). When no triangle contains the coordinate, the calibrated radial direction is raycast onto the actual mesh. Pins are then offset slightly above the surface and retain normal depth testing; the Moon occludes far-side markers. The original model is never replaced with a synthetic sphere.
 
-The camera uses the transformed geographic north vector as up. Focus travels by quaternion interpolation of its unit direction at an exterior radius, avoiding a straight chord through the Moon. Reduced-motion settings use an immediate focus. User orbit cancels movement. Keyboard-accessible location buttons provide an alternative to clicking small, crowded polar pins. Catalog filters also filter mission pins. Unknown coordinates never produce a pin or an enabled focus.
+The camera uses the transformed geographic north vector as up. Focus travels by quaternion interpolation of its unit direction at an exterior radius. Reduced-motion settings use an immediate focus. User orbit cancels movement. Keyboard-accessible location buttons provide an alternative to clicking small polar pins. Locations without coordinates cannot be focused.
 
-This solves **illustrative overview alignment**. Near-pole UV distortion and the artistic mesh prevent meter-level site separation, engineering navigation, or terrain-horizon inference. Research points are approximate published locations; mission coordinates retain their own source precision. No NASA ME/PA reference-frame accuracy claim is made. Labels explicitly retain these limits.
+This supports **illustrative overview alignment**. Near-pole UV distortion and the artistic mesh prevent meter-level site separation, engineering navigation, or terrain-horizon inference. Research points are approximate published locations. No NASA ME/PA reference-frame accuracy claim is made.
 
 ## Original asset
 
@@ -34,4 +34,4 @@ RenderX, https://sketchfab.com/3d-models/moon-26cc0b7878bb4d919b68e2be399db466, 
 
 ## Validation
 
-22 tests pass, including loading the original GLB and placing five check landmarks, all three research sites, and both catalog mission coordinates on its actual mesh. Tests cover wrapped longitude, north/south direction, east/west convention, proper rotation, surface radius and agreement with the calibrated frame. Type checking, source ESLint and production build pass. Browser verification and any limitations are recorded in TEST_REPORT.md.
+The automated suite checks loading the original GLB, landmark alignment, the three research reference points, wrapped longitude, pole direction, east/west convention, proper rotation and surface placement. These checks measure consistency with the chosen texture coordinates; they do not establish survey-grade lunar frame accuracy.

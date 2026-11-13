@@ -1,1 +1,0 @@
-Optional: SPICE kernels for date-specific geometry, only after validating the pipeline.

@@ -1,13 +1,21 @@
-# NASA source registry
+# Data sources
 
-Last source-page review: 2026-10-08. Binary retrieval and scientific validation are separate statuses.
+## Lunar terrain
 
-| Purpose | Official source | Product detail | Current status |
-|---|---|---|---|
-| Moon visualization | [NASA SVS 14959](https://svs.gsfc.nasa.gov/14959/) | `moon_small.glb`, 13.2 MB, LRO imagery/topography, credit NASA GSFC | Download retried 2026-10-08; NASA SVS timed out; fallback active |
-| Elevation and slope | [NASA GSFC PGDA product 78](https://pgda.gsfc.nasa.gov/products/78) | Site01, Site04, Site06, Site07, Site11, and Site23 5 m/pixel elevation/slope GeoTIFFs, south polar stereographic X/Y meters | Downloaded and metadata-inspected 2026-10-08 through 2026-10-09; map-only regions are not added to the mission metric summaries |
-| Historical illumination and Earth visibility | [NASA GSFC PGDA product 69](https://pgda.gsfc.nasa.gov/products/69) | 75°S–90°S, 120 m/pixel average GeoTIFFs over an 18.6-year modeled cycle | Downloaded and metadata-inspected 2026-10-08 through 2026-10-09; map-only regions are not added to the mission metric summaries |
-| Date geometry | [NASA/JPL NAIF](https://naif.jpl.nasa.gov/naif/data.html) | SPICE kernels and documentation | Not configured; feature disabled |
-| Research-site coordinates | [NASA/TM—2007-215025](https://ntrs.nasa.gov/citations/20070034951) | Approximate Sites A1, B and E used as reference markers | Cited; not landing ellipses |
+Elevation and slope previews use LRO Lunar Orbiter Laser Altimeter (LOLA) rasters from NASA Goddard [PGDA product 78](https://pgda.gsfc.nasa.gov/products/78). The map includes six 5 m/pixel elevation/slope pairs: Connecting Ridge (Site01), Shackleton Rim (Site04), Nobile Rim 1 (Site06), Peak near Shackleton (Site07), de Gerlache Rim (Site11), and Malapert Massif (Site23).
 
-For every binary record the exact URL, retrieval UTC date, byte size, SHA-256, CRS, units, resolution, bounds, temporal coverage, NoData representation, and credit. The downloader’s URLs must be verified against the live NASA product page before treating files as authoritative.
+## Sunlight and Earth visibility
+
+The sunlight and Earth-visibility layers use NASA Goddard [PGDA product 69](https://pgda.gsfc.nasa.gov/products/69), at 120 m/pixel. These are modeled averages over an 18.6-year lunar cycle. Earth visibility means that some portion of Earth's disk is geometrically visible above terrain; it does not establish radio-link availability.
+
+## Site measurements
+
+Site comparisons summarize valid raster cells within 1 km of approximate published research coordinates. The values describe local neighborhoods, not landing ellipses or safety ratings. Source coordinates and source products are linked in the interface. Missing measurements remain unavailable.
+
+## Moon model
+
+The 3D overview uses the RenderX lunar model from [Sketchfab](https://sketchfab.com/3d-models/moon-26cc0b7878bb4d919b68e2be399db466), under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The UI retains attribution. The model supports visual orientation; it is not a survey-grade terrain surface.
+
+## Local files and regeneration
+
+The source GeoTIFFs are kept under `data/nasa/` and excluded from Git because of their size. The checked-in map previews and layer manifest are regenerated with `python scripts/build_polar_map.py`; Python packages are listed in `scripts/requirements.txt`. The local inventory contains six elevation/slope pairs and two historical polar-average rasters. No terrain-uncertainty rasters or local SPICE kernels are included.

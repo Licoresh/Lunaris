@@ -1,10 +1,9 @@
-# Known limitations
+# Limitations
 
-- Original Sketchfab Moon has landmark-calibrated display alignment, UV triangle markers and geographic focus. Visual landmark checks do not establish survey-grade accuracy or a NASA lunar reference-frame tie.
-- Planner uses live NASA/JPL Horizons. Local SPICE kernels are not downloaded. Date geometry is relative to a reference horizon, not an azimuth-dependent terrain horizon.
-- Constant obstruction mask is an assumption. No electrical power, battery or operational communication link model.
-- Historic PGDA averages are separate from the date planner. Site metrics are 1 km neighborhood medians, not safety certifications.
-- Terrain-uncertainty rasters are absent. Six local elevation/slope regions are available in the map, including Malapert Site23. Derived comparison metrics remain limited to Connecting Ridge, Shackleton Rim, and Malapert. Independent GIS validation remains outstanding.
-- CLPS data are a five-mission curated snapshot. IM-3 schedule and precise Blue Ghost coordinates require further review.
-- Original 8K Moon texture is memory intensive. Binary kept intact with source backup; lower-memory devices may fail and receive an error state.
-- See TEST_REPORT.md for tests performed and not performed.
+- The sunlight and Earth-visibility maps show long-term averages, not conditions for selected dates.
+- The simulation uses periodic curves and an assumed obstruction angle. It is educational and does not calculate actual ephemerides, terrain shadows, electrical power, or radio-link performance.
+- Earth visibility is geometric. It does not account for antenna pointing, ground-station coverage or link budgets.
+- The map contains separate raster patches, not continuous high-resolution coverage of the whole south pole. Zooming does not increase source resolution.
+- Site measurements are 1 km neighborhood summaries around approximate research coordinates. They are not landing ellipses, hazard assessments or safety rankings.
+- The overview Moon is an artistic model used for geographic orientation. It is not a precision lunar reference surface; local terrain geometry comes from the LOLA products where coverage is available.
+- No terrain-uncertainty rasters are included. Independent scientific validation of every derived measurement has not been completed.
