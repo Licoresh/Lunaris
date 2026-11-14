@@ -1,6 +1,6 @@
 import { it, expect } from 'vitest';
 import { Box3, Group, Mesh, SphereGeometry, MeshStandardMaterial, Vector3 } from 'three';
-import { normalizeMoon, fitDistance, geographicAlignment, geographicUV, geographicFrame, pointOnMoon } from './moon';
+import { normalizeMoon, fitDistance, geographicAlignment, geographicUV, geographicFrame, pointOnMoon, southPoleViewDirection, southPoleViewUp } from './moon';
 it('centers offset imported geometry and normalizes diameter without mutating the original',()=>{
   const input=new Group();const mesh=new Mesh(new SphereGeometry(4),new MeshStandardMaterial());mesh.position.set(12,-3,8);input.add(mesh);
   const before=new Box3().setFromObject(input);const normalized=normalizeMoon(input);const after=new Box3().setFromObject(normalized);
@@ -12,6 +12,10 @@ it('fits the complete Moon into both landscape and narrow portrait viewports',()
 it('uses a proper rotation and explicit south-at-top, east-positive UV mapping',()=>{
  expect(geographicAlignment.verified).toBe(true);expect(geographicFrame.determinant()).toBeCloseTo(1,10);
  expect(geographicUV(90,0).toArray()).toEqual([.5,1]);expect(geographicUV(-90,0).toArray()).toEqual([.5,0]);expect(geographicUV(0,90).toArray()).toEqual([.75,.5]);expect(geographicUV(0,-90).toArray()).toEqual([.25,.5]);expect(geographicUV(0,270).toArray()).toEqual([.25,.5]);expect(()=>geographicUV(91,0)).toThrow();
+});
+it('sets the overview camera at the lunar south pole with a meridian-aligned up axis',()=>{
+ expect(southPoleViewDirection.angleTo(new Vector3(0,-1,0).applyMatrix3(geographicFrame))).toBeCloseTo(0,10);
+ expect(southPoleViewDirection.dot(southPoleViewUp)).toBeCloseTo(0,10);expect(southPoleViewDirection.length()).toBeCloseTo(1);expect(southPoleViewUp.length()).toBeCloseTo(1);
 });
 
 

@@ -22,6 +22,8 @@ export const geographicFrame = new Matrix3().set(
  -.42945858297433964, .2667045692513691, -.8628058867729833
 );
 export const geographicNorth = new Vector3(0, 1, 0).applyMatrix3(geographicFrame);
+export const southPoleViewDirection = new Vector3(0, -1, 0).applyMatrix3(geographicFrame).normalize();
+export const southPoleViewUp = new Vector3(0, 0, 1).applyMatrix3(geographicFrame).normalize();
 export const geographicAlignment = {
  verified: true,
  scope: 'Landmark-calibrated visualization, not survey-grade positioning',
