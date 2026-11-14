@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { sites } from './sites';
+import { candidateRegions, terrainRegions } from './sites';
 import { latLonToVector } from './coordinates';
 
 describe('lunar coordinate display transform', () => {
   it('keeps all surface points on the requested radius', () => {
-    for (const site of sites) expect(latLonToVector(site.latitude, site.longitude, 1).length()).toBeCloseTo(1, 10);
+    for (const site of [...candidateRegions, ...terrainRegions]) expect(latLonToVector(site.latitude, site.longitude, 1).length()).toBeCloseTo(1, 10);
   });
   it('places the poles on the Y axis', () => {
     const north = latLonToVector(90, 117, 1); const south = latLonToVector(-90, 42, 1);
@@ -17,17 +17,27 @@ describe('lunar coordinate display transform', () => {
 });
 
 describe('science transparency', () => {
-  it('provides sourced NASA metrics for all six comparison areas', () => {
-    expect(sites).toHaveLength(6);
-    for (const site of sites) for (const metric of Object.values(site.metrics)) {
+  it('lists all nine NASA candidate regions and historical light metrics', () => {
+    expect(candidateRegions).toHaveLength(9);
+    expect(new Set(candidateRegions.map(site=>site.shortName)).size).toBe(9);
+    for (const site of candidateRegions) {
+      expect(site.areaKm2).toBeGreaterThan(0);
+      for (const key of ['illumination','earthVisibility'] as const) {
+        expect(site.metrics[key].value).not.toBeNull(); expect(site.metrics[key].status).toBe('nasa-derived');
+      }
+      expect(site.metrics.elevation.value !== null).toBe(Boolean(site.terrainRegionId));
+      expect(site.metrics.slope.value !== null).toBe(Boolean(site.terrainRegionId));
+    }
+  });
+  it('preserves six local terrain study regions outside the candidate list', () => {
+    expect(terrainRegions).toHaveLength(6);
+    expect(terrainRegions.filter((site) => site.coordinateBasis === 'published-research-point')).toHaveLength(3);
+    expect(terrainRegions.filter((site) => site.coordinateBasis === 'raster-footprint-center')).toHaveLength(3);
+    for (const site of terrainRegions) for (const metric of Object.values(site.metrics)) {
       expect(metric.value).not.toBeNull(); expect(metric.status).toBe('nasa-derived');
     }
   });
-  it('distinguishes published coordinates from raster-center areas', () => {
-    expect(sites.filter((site) => site.coordinateBasis === 'published-research-point')).toHaveLength(3);
-    expect(sites.filter((site) => site.coordinateBasis === 'raster-footprint-center')).toHaveLength(3);
-  });
   it('keeps all comparison coordinates inside valid bounds', () => {
-    for (const site of sites) { expect(site.latitude).toBeGreaterThanOrEqual(-90); expect(site.latitude).toBeLessThanOrEqual(90); expect(site.longitude).toBeGreaterThanOrEqual(0); expect(site.longitude).toBeLessThan(360); }
+    for (const site of candidateRegions) { expect(site.latitude).toBeGreaterThanOrEqual(-90); expect(site.latitude).toBeLessThanOrEqual(90); expect(site.longitude).toBeGreaterThanOrEqual(0); expect(site.longitude).toBeLessThan(360); }
   });
 });

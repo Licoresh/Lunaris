@@ -5,7 +5,8 @@ import { OrbitControls } from '@react-three/drei';
 import { Component, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { BufferGeometry, Color, Float32BufferAttribute } from 'three';
 import { OrbitControls as Controls } from 'three-stdlib';
-import { sites } from '@/lib/sites';
+import { candidateRegions, terrainRegions } from '@/lib/sites';
+import { polarPoint } from '@/lib/polar';
 import LunarGlobe from './LunarGlobe';
 import ridge from '@/data/terrain-connecting-ridge.json';
 import shackleton from '@/data/terrain-shackleton-rim.json';
@@ -14,7 +15,7 @@ import peak from '@/data/terrain-peak-near-shackleton.json';
 import gerlache from '@/data/terrain-de-gerlache-rim.json';
 import malapert from '@/data/terrain-malapert-massif.json';
 
-const globeLocations=sites.map(site=>({id:site.id,name:site.shortName,latitude:site.latitude,longitude:site.longitude,kind:site.coordinateBasis==='published-research-point'?'research reference':'raster center'}));
+const globeLocations=candidateRegions.map(site=>({id:site.id,name:site.shortName,latitude:site.latitude,longitude:site.longitude,kind:'NASA candidate region'}));
 type Props = { selectedId: string; onSelect: (id: string) => void };
 type Mode = 'terrain' | 'globe';
 type Terrain = typeof ridge;
@@ -37,7 +38,7 @@ function sampleTerrain(data: Terrain, x: number, z: number): Sample {
   return {siteId:data.siteId,x,z,height,latitude:(2*Math.atan(Math.hypot(east,north)/(2*1737400))-Math.PI/2)*180/Math.PI,longitude:(Math.atan2(east,north)*180/Math.PI+360)%360};
 }
 
-function TerrainMesh({data, markers, exaggeration, onSample, sample}: {data:Terrain;labels:boolean;markers:boolean;exaggeration:number;onSample:(sample:Sample)=>void;sample:Sample|null}) {
+function TerrainMesh({data, markers, exaggeration, onSample, sample, candidate}: {data:Terrain;labels:boolean;markers:boolean;exaggeration:number;onSample:(sample:Sample)=>void;sample:Sample|null;candidate?:{latitude:number;longitude:number}}) {
   const scale = 7 / ((data.boundsMeters[2]-data.boundsMeters[0]) * (data.displayGridSize-1)/data.displayGridSize);
   const midpoint = (data.minimumMeters+data.maximumMeters)/2;
   const heightY = (height:number) => (height-midpoint)*scale*exaggeration;
@@ -56,10 +57,15 @@ function TerrainMesh({data, markers, exaggeration, onSample, sample}: {data:Terr
   const x=((data.focusPointMeters[0]-data.boundsMeters[0]-spacing/2)/(spacing*(data.displayGridSize-1))-.5)*7;
   const z=((data.boundsMeters[3]-data.focusPointMeters[1]-spacing/2)/(spacing*(data.displayGridSize-1))-.5)*7;
   const focus=sampleTerrain(data,x,z);
+  const projected=candidate?polarPoint(candidate.latitude,candidate.longitude):null;
+  const east=projected?.x??0,north=projected?-projected.y:0,[left,bottom,right,top]=data.boundsMeters;
+  const candidateInside=Boolean(projected&&east>=left&&east<=right&&north>=bottom&&north<=top);
+  const candidateSample=candidateInside?sampleTerrain(data,((east-left)/(right-left)-.5)*7,((top-north)/(top-bottom)-.5)*7):null;
   const pick=(event:ThreeEvent<MouseEvent>)=>{if(event.delta>4)return;event.stopPropagation();onSample(sampleTerrain(data,event.point.x,event.point.z))};
   return <>
     <mesh geometry={geometry} onClick={pick}><meshStandardMaterial vertexColors roughness={1}/></mesh>
     {markers&&<mesh position={[x,heightY(focus.height)+.09,z]} onClick={e=>{e.stopPropagation();onSample(focus)}}><sphereGeometry args={[.065,16,16]}/><meshBasicMaterial color="#ffd16c"/></mesh>}
+    {markers&&candidateSample&&<mesh position={[candidateSample.x,heightY(candidateSample.height)+.1,candidateSample.z]}><sphereGeometry args={[.055,16,16]}/><meshBasicMaterial color="white"/></mesh>}
     {sample&&<mesh position={[sample.x,heightY(sample.height)+.045,sample.z]}><sphereGeometry args={[.04,12,12]}/><meshBasicMaterial color="white"/></mesh>}
   </>;
 }
@@ -73,12 +79,13 @@ function CameraControls({mode,siteId,reset,zoom}:{mode:Mode;siteId:string;reset:
 class ViewerBoundary extends Component<{children:ReactNode},{failed:boolean}>{state={failed:false};static getDerivedStateFromError(){return {failed:true}}render(){return this.state.failed?<div className="viewer-loading" role="alert">3D rendering is unavailable. Site measurements and comparisons remain available below. Reload to retry.</div>:this.props.children}}
 
 export default function MoonViewer({selectedId,onSelect}:Props){
-  const data=terrains[selectedId];const [requestedMode,setMode]=useState<Mode>('terrain');const mode:Mode=requestedMode==='terrain'&&data?'terrain':'globe';
+  const selected=candidateRegions.find(site=>site.id===selectedId)??candidateRegions[0];const [terrainChoice,setTerrainChoice]=useState<{candidateId:string;terrainId:string}|null>(null);const terrainId=terrainChoice?.candidateId===selectedId?terrainChoice.terrainId:selected.terrainRegionId??null;const data=terrainId?terrains[terrainId]:undefined;const [requestedMode,setMode]=useState<Mode>(data?'terrain':'globe');const mode:Mode=requestedMode==='terrain'&&data?'terrain':'globe';
   const [labels,setLabels]=useState(true),[markers,setMarkers]=useState(true),[expanded,setExpanded]=useState(false),[exaggeration,setExaggeration]=useState(1);
   const [reset,setReset]=useState(0),[zoom,setZoom]=useState({nonce:0,factor:1}),[sample,setSample]=useState<Sample|null>(null);
-  const currentSample=sample?.siteId===selectedId?sample:null;
+  const currentSample=sample?.siteId===terrainId?sample:null;
   useEffect(()=>{if(!expanded)return;const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape')setExpanded(false)};document.addEventListener('keydown',onKey);return()=>document.removeEventListener('keydown',onKey)},[expanded]);
-  const select=(id:string)=>{onSelect(id);setMode(terrains[id]?'terrain':'globe');setSample(null)};
+  const select=(id:string)=>{const candidate=candidateRegions.find(site=>site.id===id);setTerrainChoice(null);setMode(candidate?.terrainRegionId?'terrain':'globe');onSelect(id);setSample(null)};
+  const selectTerrain=(id:string)=>{const candidate=candidateRegions.find(site=>site.terrainRegionId===id);setTerrainChoice({candidateId:candidate?.id??selectedId,terrainId:id});setMode('terrain');setSample(null);if(candidate)onSelect(candidate.id)};
   const doZoom=(factor:number)=>setZoom(value=>({nonce:value.nonce+1,factor}));
   return <section className={`exploration ${expanded?'is-expanded':''}`} aria-label="Interactive Moon explorer">
     <div className="explorer-toolbar">
@@ -86,20 +93,21 @@ export default function MoonViewer({selectedId,onSelect}:Props){
       <button onClick={()=>setReset(n=>n+1)}>Reset view</button><button disabled={mode==='globe'} onClick={()=>doZoom(.8)} aria-label="Zoom in">＋</button><button disabled={mode==='globe'} onClick={()=>doZoom(1.25)} aria-label="Zoom out">−</button>
       <button disabled={mode==='globe'} aria-pressed={markers} onClick={()=>setMarkers(v=>!v)}>Sites</button><button disabled={mode==='globe'} aria-pressed={labels} onClick={()=>setLabels(v=>!v)}>Labels</button><button aria-pressed={expanded} onClick={()=>setExpanded(v=>!v)}>{expanded?'Close expanded view':'Expand'}</button>
     </div>
-    <div className="explorer-sites">{sites.map(site=><button key={site.id} aria-pressed={site.id===selectedId} onClick={()=>select(site.id)} title={site.coordinateNote}>{site.shortName}<small>{terrains[site.id]?'3D terrain':'Overview only'} · {site.coordinateBasis==='published-research-point'?'research point':'raster center'}</small></button>)}</div>
+    <div className="explorer-sites" aria-label="NASA candidate regions">{candidateRegions.map(site=><button key={site.id} aria-pressed={site.id===selectedId} onClick={()=>select(site.id)} title={site.coordinateNote}>{site.shortName}<small>{site.terrainRegionId?'5 m LOLA nearby':'Overview only'} · candidate center</small></button>)}</div>
+    <div className="terrain-coverage-list"><div><b>Local high-resolution terrain</b><span>6 LOLA study patches</span></div>{terrainRegions.map(site=><button key={site.id} aria-pressed={terrainId===site.id&&mode==='terrain'} onClick={()=>selectTerrain(site.id)}>{site.shortName}<small>5 m source · 3D mesh</small></button>)}</div>
     <div className="viewer exploration-canvas">
-      {mode==='globe'?<LunarGlobe reset={reset} locations={globeLocations} selectedId={selectedId} onSelect={onSelect}/>:<ViewerBoundary><Canvas camera={{position:[0,6,9],fov:45}} dpr={[1,1.5]} fallback={<div className="viewer-loading">WebGL is unavailable. Use the site measurements below.</div>}>
+      {mode==='globe'?<LunarGlobe reset={reset} locations={globeLocations} selectedId={selectedId} onSelect={select}/>:<ViewerBoundary><Canvas camera={{position:[0,6,9],fov:45}} dpr={[1,1.5]} fallback={<div className="viewer-loading">WebGL is unavailable. Use the site measurements below.</div>}>
         <color attach="background" args={['#040a10']}/><ambientLight intensity={.7}/><directionalLight position={[-5,5,2]} intensity={1.7}/>
-        {data&&<TerrainMesh data={data} markers={markers} labels={labels} exaggeration={exaggeration} sample={currentSample} onSample={setSample}/>}
-        <CameraControls mode={mode} siteId={selectedId} reset={reset} zoom={zoom}/>
+        {data&&<TerrainMesh data={data} markers={markers} labels={labels} exaggeration={exaggeration} sample={currentSample} onSample={setSample} candidate={selected.terrainRegionId===terrainId?selected:undefined}/>}
+        <CameraControls mode={mode} siteId={`${selectedId}-${terrainId??''}`} reset={reset} zoom={zoom}/>
       </Canvas></ViewerBoundary>}
-      {mode==='terrain'&&labels&&<div className="terrain-reference-label"><b>{sites.find(s=>s.id===selectedId)?.shortName}</b><span>{sites.find(s=>s.id===selectedId)?.coordinateBasis==='published-research-point'?'Published research point':'NASA raster-footprint center'} · gold marker</span></div>}
+      {mode==='terrain'&&labels&&<div className="terrain-reference-label"><b>{terrainRegions.find(s=>s.id===terrainId)?.shortName}</b><span>White: approximate candidate center · gold: raster reference point</span></div>}
       {mode==='terrain'&&<div className="explorer-badge">NASA LOLA · elevation terrain</div>}
       {mode==='terrain'&&data&&<div className="elevation-legend"><b>ELEVATION · METERS</b><div/><span>{Math.round(data.minimumMeters).toLocaleString()}</span><span>{Math.round(data.maximumMeters).toLocaleString()}</span><small>5 m source · ≈{Math.round(data.displaySpacingMeters)} m display · {exaggeration}× vertical scale</small></div>}
       {mode==='terrain'&&<p className="viewer-caption">Drag to orbit · Scroll / pinch to zoom{mode==='terrain'?' · Right-drag to pan · Click terrain to inspect':''}</p>}
     </div>
     <div className="explorer-inspector" aria-live="polite">
-      <div>{mode==='terrain'?currentSample?<><b>{currentSample.height.toFixed(1)} m</b><span>{Math.abs(currentSample.latitude).toFixed(4)}° S / {currentSample.longitude.toFixed(4)}° E · interpolated display elevation</span></>:<><b>Inspect the surface</b><span>Click any point on the terrain to read its coordinates and elevation.</span></>:<><b>{data?'Choose Terrain to inspect elevations':'Terrain coverage unavailable for this area'}</b><span>Select one of the six comparison areas above.</span></>}</div>
+      <div>{mode==='terrain'?currentSample?<><b>{currentSample.height.toFixed(1)} m</b><span>{Math.abs(currentSample.latitude).toFixed(4)}° S / {currentSample.longitude.toFixed(4)}° E · interpolated display elevation</span></>:<><b>Inspect the surface</b><span>Click any point on the terrain to read its coordinates and elevation.</span></>:<><b>{selected.shortName} · overview only</b><span>Candidate center is approximate. Choose one of the six local LOLA patches below for a full-resolution terrain mesh.</span></>}</div>
       {mode==='terrain'&&<label>Vertical scale <select value={exaggeration} onChange={e=>setExaggeration(Number(e.target.value))}><option value={1}>1× actual proportions</option><option value={2}>2× relief</option><option value={4}>4× relief</option></select></label>}
     </div>
   </section>;

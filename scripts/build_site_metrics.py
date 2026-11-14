@@ -1,8 +1,4 @@
-"""Build provenance-bearing metrics for six NASA south-pole terrain regions.
-
-Three locations use approximate published research coordinates. The other
-three use the geographic center of their NASA terrain-raster footprint.
-"""
+"""Build provenance-bearing metrics for NASA candidate regions and local terrain studies."""
 from __future__ import annotations
 import hashlib, json, math
 from datetime import datetime, timezone
@@ -23,6 +19,15 @@ SITES = {
     "nobile-rim-1": {"terrain": "Site06", "basis": "raster-footprint-center"},
     "peak-near-shackleton": {"terrain": "Site07", "basis": "raster-footprint-center"},
     "de-gerlache-rim": {"terrain": "Site11", "basis": "raster-footprint-center"},
+    "peak-near-cabeus-b": {"latitude": -83.6, "longitude": 291.3, "basis": "approximate-candidate-region-center"},
+    "haworth": {"latitude": -86.8, "longitude": 337.2, "basis": "approximate-candidate-region-center"},
+    "malapert-massif-candidate": {"latitude": -86.0, "longitude": 359.8, "terrain": "Site23", "basis": "approximate-candidate-region-center"},
+    "mons-mouton-plateau": {"latitude": -84.3, "longitude": 30.6, "basis": "approximate-candidate-region-center"},
+    "mons-mouton": {"latitude": -85.4, "longitude": 31.7, "basis": "approximate-candidate-region-center"},
+    "nobile-rim-1-candidate": {"latitude": -85.4, "longitude": 37.3, "terrain": "Site06", "basis": "approximate-candidate-region-center"},
+    "nobile-rim-2": {"latitude": -84.0, "longitude": 58.8, "basis": "approximate-candidate-region-center"},
+    "de-gerlache-rim-2": {"latitude": -88.2, "longitude": 295.4, "basis": "approximate-candidate-region-center"},
+    "slater-plain": {"latitude": -87.2, "longitude": 125.5, "basis": "approximate-candidate-region-center"},
 }
 FILES = {
     "Site23.elevation": ROOT / "data/nasa/terrain/Site23_final_adj_5mpp_surf.tif",
@@ -42,7 +47,7 @@ FILES = {
 }
 
 def site_coordinates(site: dict) -> tuple[float, float]:
-    if site["basis"] == "published-research-point":
+    if site["basis"] in {"published-research-point", "approximate-candidate-region-center"}:
         return site["latitude"], site["longitude"]
     source = FILES[f'{site["terrain"]}.elevation']
     with rasterio.open(source) as ds:
@@ -90,7 +95,7 @@ def main() -> None:
         if not path.exists(): raise SystemExit(f"Missing required source for {name}: {path}")
     result = {"schemaVersion": 2, "generatedAt": datetime.now(timezone.utc).isoformat(),
               "coordinateConvention": "selenographic latitude; positive-east longitude 0-360",
-              "method": "1 km circular-neighborhood medians around published research points or NASA terrain-raster footprint centers, as identified per site",
+              "method": "1 km circular-neighborhood medians at published research points, NASA terrain-raster centers, or approximate NASA candidate-region centers, as identified per site",
               "sites": {}}
     for site_id, site in SITES.items():
         latitude, longitude = site_coordinates(site)
@@ -98,7 +103,7 @@ def main() -> None:
             "illumination": neighborhood(FILES["illumination"], longitude, latitude, "illumination"),
             "earthVisibility": neighborhood(FILES["earthVisibility"], longitude, latitude, "earthVisibility"),
         }
-        if site["terrain"]:
+        if site.get("terrain"):
             metrics["elevation"] = neighborhood(FILES[f'{site["terrain"]}.elevation'], longitude, latitude, "elevation")
             metrics["slope"] = neighborhood(FILES[f'{site["terrain"]}.slope'], longitude, latitude, "slope")
         result["sites"][site_id] = {"latitude": latitude, "longitude": longitude, "coordinateBasis": site["basis"], "metrics": metrics}
