@@ -6,7 +6,7 @@ LUNARIS is an educational lunar south-pole planning explorer built for the NASA 
 
 - Interactive south-polar map with all nine regions in NASA's 2024 refined Artemis candidate set. Dashed circles show area-equivalent sizes, not official region outlines.
 - Historical sunlight and Earth-visibility values for all nine approximate region centers, plus elevation and slope layers for six local LOLA raster patches.
-- Compare candidate regions and run an illustrative Sun/Earth window simulation. Local 5 m elevation and slope are available at the Malapert Massif and Nobile Rim 1 candidate centers only.
+- Compare two sites and date intervals, including alternate dates at the same site. The simulation shows horizon windows, modeled set timing, darkness duration and a relative solar-input proxy. Local 5 m elevation and slope are available at the Malapert Massif and Nobile Rim 1 candidate centers only.
 - 3D Moon overview with all nine region markers and six separate high-resolution terrain meshes.
 - PDF exports for comparison and simulation reports.
 
