@@ -9,14 +9,17 @@ import { sites } from '@/lib/sites';
 import LunarGlobe from './LunarGlobe';
 import ridge from '@/data/terrain-connecting-ridge.json';
 import shackleton from '@/data/terrain-shackleton-rim.json';
+import nobile from '@/data/terrain-nobile-rim-1.json';
+import peak from '@/data/terrain-peak-near-shackleton.json';
+import gerlache from '@/data/terrain-de-gerlache-rim.json';
 import malapert from '@/data/terrain-malapert-massif.json';
 
-const globeLocations=sites.map(site=>({id:site.id,name:site.shortName,latitude:site.latitude,longitude:site.longitude,kind:'research'}));
+const globeLocations=sites.map(site=>({id:site.id,name:site.shortName,latitude:site.latitude,longitude:site.longitude,kind:site.coordinateBasis==='published-research-point'?'research reference':'raster center'}));
 type Props = { selectedId: string; onSelect: (id: string) => void };
 type Mode = 'terrain' | 'globe';
 type Terrain = typeof ridge;
 type Sample = { siteId: string; x: number; z: number; height: number; latitude: number; longitude: number };
-const terrains: Record<string, Terrain | undefined> = { 'connecting-ridge': ridge, 'shackleton-rim': shackleton, 'malapert-massif': malapert };
+const terrains: Record<string, Terrain | undefined> = { 'connecting-ridge': ridge, 'shackleton-rim': shackleton, 'nobile-rim-1': nobile, 'peak-near-shackleton': peak, 'de-gerlache-rim': gerlache, 'malapert-massif': malapert };
 const colors = ['#10274f', '#176984', '#3a9b95', '#94ad60', '#c8af75', '#e8ded0'].map(c => new Color(c));
 
 function sampleTerrain(data: Terrain, x: number, z: number): Sample {
@@ -83,20 +86,20 @@ export default function MoonViewer({selectedId,onSelect}:Props){
       <button onClick={()=>setReset(n=>n+1)}>Reset view</button><button disabled={mode==='globe'} onClick={()=>doZoom(.8)} aria-label="Zoom in">＋</button><button disabled={mode==='globe'} onClick={()=>doZoom(1.25)} aria-label="Zoom out">−</button>
       <button disabled={mode==='globe'} aria-pressed={markers} onClick={()=>setMarkers(v=>!v)}>Sites</button><button disabled={mode==='globe'} aria-pressed={labels} onClick={()=>setLabels(v=>!v)}>Labels</button><button aria-pressed={expanded} onClick={()=>setExpanded(v=>!v)}>{expanded?'Close expanded view':'Expand'}</button>
     </div>
-    <div className="explorer-sites">{sites.map(site=><button key={site.id} aria-pressed={site.id===selectedId} onClick={()=>select(site.id)}>{site.shortName}<small>{terrains[site.id]?'3D terrain':'Overview only'}</small></button>)}</div>
+    <div className="explorer-sites">{sites.map(site=><button key={site.id} aria-pressed={site.id===selectedId} onClick={()=>select(site.id)} title={site.coordinateNote}>{site.shortName}<small>{terrains[site.id]?'3D terrain':'Overview only'} · {site.coordinateBasis==='published-research-point'?'research point':'raster center'}</small></button>)}</div>
     <div className="viewer exploration-canvas">
       {mode==='globe'?<LunarGlobe reset={reset} locations={globeLocations} selectedId={selectedId} onSelect={onSelect}/>:<ViewerBoundary><Canvas camera={{position:[0,6,9],fov:45}} dpr={[1,1.5]} fallback={<div className="viewer-loading">WebGL is unavailable. Use the site measurements below.</div>}>
         <color attach="background" args={['#040a10']}/><ambientLight intensity={.7}/><directionalLight position={[-5,5,2]} intensity={1.7}/>
         {data&&<TerrainMesh data={data} markers={markers} labels={labels} exaggeration={exaggeration} sample={currentSample} onSample={setSample}/>}
         <CameraControls mode={mode} siteId={selectedId} reset={reset} zoom={zoom}/>
       </Canvas></ViewerBoundary>}
-      {mode==='terrain'&&labels&&<div className="terrain-reference-label"><b>{sites.find(s=>s.id===selectedId)?.shortName}</b><span>Research reference point · gold marker</span></div>}
+      {mode==='terrain'&&labels&&<div className="terrain-reference-label"><b>{sites.find(s=>s.id===selectedId)?.shortName}</b><span>{sites.find(s=>s.id===selectedId)?.coordinateBasis==='published-research-point'?'Published research point':'NASA raster-footprint center'} · gold marker</span></div>}
       {mode==='terrain'&&<div className="explorer-badge">NASA LOLA · elevation terrain</div>}
       {mode==='terrain'&&data&&<div className="elevation-legend"><b>ELEVATION · METERS</b><div/><span>{Math.round(data.minimumMeters).toLocaleString()}</span><span>{Math.round(data.maximumMeters).toLocaleString()}</span><small>5 m source · ≈{Math.round(data.displaySpacingMeters)} m display · {exaggeration}× vertical scale</small></div>}
       {mode==='terrain'&&<p className="viewer-caption">Drag to orbit · Scroll / pinch to zoom{mode==='terrain'?' · Right-drag to pan · Click terrain to inspect':''}</p>}
     </div>
     <div className="explorer-inspector" aria-live="polite">
-      <div>{mode==='terrain'?currentSample?<><b>{currentSample.height.toFixed(1)} m</b><span>{Math.abs(currentSample.latitude).toFixed(4)}° S / {currentSample.longitude.toFixed(4)}° E · interpolated display elevation</span></>:<><b>Inspect the surface</b><span>Click any point on the terrain to read its coordinates and elevation.</span></>:<><b>{data?'Choose Terrain to inspect elevations':'Terrain coverage unavailable for Malapert'}</b><span>Select a research site for local 3D exploration.</span></>}</div>
+      <div>{mode==='terrain'?currentSample?<><b>{currentSample.height.toFixed(1)} m</b><span>{Math.abs(currentSample.latitude).toFixed(4)}° S / {currentSample.longitude.toFixed(4)}° E · interpolated display elevation</span></>:<><b>Inspect the surface</b><span>Click any point on the terrain to read its coordinates and elevation.</span></>:<><b>{data?'Choose Terrain to inspect elevations':'Terrain coverage unavailable for this area'}</b><span>Select one of the six comparison areas above.</span></>}</div>
       {mode==='terrain'&&<label>Vertical scale <select value={exaggeration} onChange={e=>setExaggeration(Number(e.target.value))}><option value={1}>1× actual proportions</option><option value={2}>2× relief</option><option value={4}>4× relief</option></select></label>}
     </div>
   </section>;

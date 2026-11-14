@@ -10,7 +10,10 @@ class ProcessedScienceTests(unittest.TestCase):
 
     def test_coordinate_convention_and_sites(self):
         self.assertIn("positive-east", self.data["coordinateConvention"])
-        self.assertEqual(set(self.data["sites"]), {"connecting-ridge", "shackleton-rim", "malapert-massif"})
+        self.assertEqual(set(self.data["sites"]), {"connecting-ridge", "shackleton-rim", "malapert-massif", "nobile-rim-1", "peak-near-shackleton", "de-gerlache-rim"})
+        for site_id, site in self.data["sites"].items():
+            expected = "raster-footprint-center" if site_id in {"nobile-rim-1", "peak-near-shackleton", "de-gerlache-rim"} else "published-research-point"
+            self.assertEqual(site["coordinateBasis"], expected)
 
     def test_values_are_physically_bounded(self):
         for site in self.data["sites"].values():

@@ -1,7 +1,7 @@
-"""Build small, provenance-bearing site metrics from downloaded NASA rasters.
+"""Build provenance-bearing metrics for six NASA south-pole terrain regions.
 
-Values are circular 1 km neighborhood medians around approximate published
-research points. This avoids implying precision beyond the source coordinates.
+Three locations use approximate published research coordinates. The other
+three use the geographic center of their NASA terrain-raster footprint.
 """
 from __future__ import annotations
 import hashlib, json, math
@@ -17,20 +17,39 @@ OUT = ROOT / "src/data/site-metrics.json"
 SOURCE_CRS = "+proj=longlat +R=1737400 +no_defs"
 RADIUS_M = 1000.0
 SITES = {
-    "connecting-ridge": {"latitude": -89.4, "longitude": 233.0, "terrain": "Site01"},
-    "shackleton-rim": {"latitude": -89.8, "longitude": 213.0, "terrain": "Site04"},
-    "malapert-massif": {"latitude": -86.0, "longitude": 4.0, "terrain": "Site23"},
+    "connecting-ridge": {"latitude": -89.4, "longitude": 233.0, "terrain": "Site01", "basis": "published-research-point"},
+    "shackleton-rim": {"latitude": -89.8, "longitude": 213.0, "terrain": "Site04", "basis": "published-research-point"},
+    "malapert-massif": {"latitude": -86.0, "longitude": 4.0, "terrain": "Site23", "basis": "published-research-point"},
+    "nobile-rim-1": {"terrain": "Site06", "basis": "raster-footprint-center"},
+    "peak-near-shackleton": {"terrain": "Site07", "basis": "raster-footprint-center"},
+    "de-gerlache-rim": {"terrain": "Site11", "basis": "raster-footprint-center"},
 }
 FILES = {
     "Site23.elevation": ROOT / "data/nasa/terrain/Site23_final_adj_5mpp_surf.tif",
     "Site23.slope": ROOT / "data/nasa/terrain/Site23_final_adj_5mpp_slp.tif",
-    "illumination": ROOT / "data/nasa/illumination/AVGVISIB_75S_120M_201608.TIF",
-    "earthVisibility": ROOT / "data/nasa/earth-visibility/AVGVISIB_75S_120M_201608_EARTH.TIF",
     "Site01.elevation": ROOT / "data/nasa/terrain/Site01_final_adj_5mpp_surf.tif",
     "Site01.slope": ROOT / "data/nasa/terrain/Site01_final_adj_5mpp_slp.tif",
     "Site04.elevation": ROOT / "data/nasa/terrain/Site04_final_adj_5mpp_surf.tif",
     "Site04.slope": ROOT / "data/nasa/terrain/Site04_final_adj_5mpp_slp.tif",
+    "Site06.elevation": ROOT / "data/nasa/terrain/Site06_final_adj_5mpp_surf.tif",
+    "Site06.slope": ROOT / "data/nasa/terrain/Site06_final_adj_5mpp_slp.tif",
+    "Site07.elevation": ROOT / "data/nasa/terrain/Site07_final_adj_5mpp_surf.tif",
+    "Site07.slope": ROOT / "data/nasa/terrain/Site07_final_adj_5mpp_slp.tif",
+    "Site11.elevation": ROOT / "data/nasa/terrain/Site11_final_adj_5mpp_surf.tif",
+    "Site11.slope": ROOT / "data/nasa/terrain/Site11_final_adj_5mpp_slp.tif",
+    "illumination": ROOT / "data/nasa/illumination/AVGVISIB_75S_120M_201608.TIF",
+    "earthVisibility": ROOT / "data/nasa/earth-visibility/AVGVISIB_75S_120M_201608_EARTH.TIF",
 }
+
+def site_coordinates(site: dict) -> tuple[float, float]:
+    if site["basis"] == "published-research-point":
+        return site["latitude"], site["longitude"]
+    source = FILES[f'{site["terrain"]}.elevation']
+    with rasterio.open(source) as ds:
+        x = (ds.bounds.left + ds.bounds.right) / 2
+        y = (ds.bounds.bottom + ds.bounds.top) / 2
+        longitude, latitude = transform(ds.crs, SOURCE_CRS, [x], [y])
+    return round(float(latitude[0]), 6), round(float(longitude[0]) % 360, 6)
 
 def digest(path: Path) -> str:
     value = hashlib.sha256()
@@ -69,19 +88,20 @@ def neighborhood(path: Path, longitude: float, latitude: float, kind: str) -> di
 def main() -> None:
     for name, path in FILES.items():
         if not path.exists(): raise SystemExit(f"Missing required source for {name}: {path}")
-    result = {"schemaVersion": 1, "generatedAt": datetime.now(timezone.utc).isoformat(),
+    result = {"schemaVersion": 2, "generatedAt": datetime.now(timezone.utc).isoformat(),
               "coordinateConvention": "selenographic latitude; positive-east longitude 0-360",
-              "method": "1 km circular neighborhood median around approximate NASA/TM-2007-215025 research points",
+              "method": "1 km circular-neighborhood medians around published research points or NASA terrain-raster footprint centers, as identified per site",
               "sites": {}}
     for site_id, site in SITES.items():
+        latitude, longitude = site_coordinates(site)
         metrics = {
-            "illumination": neighborhood(FILES["illumination"], site["longitude"], site["latitude"], "illumination"),
-            "earthVisibility": neighborhood(FILES["earthVisibility"], site["longitude"], site["latitude"], "earthVisibility"),
+            "illumination": neighborhood(FILES["illumination"], longitude, latitude, "illumination"),
+            "earthVisibility": neighborhood(FILES["earthVisibility"], longitude, latitude, "earthVisibility"),
         }
         if site["terrain"]:
-            metrics["elevation"] = neighborhood(FILES[f'{site["terrain"]}.elevation'], site["longitude"], site["latitude"], "elevation")
-            metrics["slope"] = neighborhood(FILES[f'{site["terrain"]}.slope'], site["longitude"], site["latitude"], "slope")
-        result["sites"][site_id] = {"latitude": site["latitude"], "longitude": site["longitude"], "metrics": metrics}
+            metrics["elevation"] = neighborhood(FILES[f'{site["terrain"]}.elevation'], longitude, latitude, "elevation")
+            metrics["slope"] = neighborhood(FILES[f'{site["terrain"]}.slope'], longitude, latitude, "slope")
+        result["sites"][site_id] = {"latitude": latitude, "longitude": longitude, "coordinateBasis": site["basis"], "metrics": metrics}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(result, indent=2, allow_nan=False), encoding="utf-8")
     print(f"Wrote {OUT} with {len(result['sites'])} sites")

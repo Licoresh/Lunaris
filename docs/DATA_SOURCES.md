@@ -10,7 +10,7 @@ The sunlight and Earth-visibility layers use NASA Goddard [PGDA product 69](http
 
 ## Site measurements
 
-Site comparisons summarize valid raster cells within 1 km of approximate published research coordinates. The values describe local neighborhoods, not landing ellipses or safety ratings. Source coordinates and source products are linked in the interface. Missing measurements remain unavailable.
+The comparison offers six NASA terrain regions. Connecting Ridge, Shackleton Rim, and Malapert Massif use approximate published research coordinates. Nobile Rim 1, Peak near Shackleton, and de Gerlache Rim use the geographic centers of their PGDA terrain-raster footprints, derived from the raster bounds. Each metric is the median of valid cells within 1 km of its comparison point. Raster-center points are reproducible regional references, not published landing coordinates or ellipses. These measurements are not safety ratings. Coordinates and source products are linked in the interface.
 
 ## Moon model
 

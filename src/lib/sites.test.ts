@@ -17,12 +17,17 @@ describe('lunar coordinate display transform', () => {
 });
 
 describe('science transparency', () => {
-  it('provides sourced NASA metrics for all three sites', () => {
+  it('provides sourced NASA metrics for all six comparison areas', () => {
+    expect(sites).toHaveLength(6);
     for (const site of sites) for (const metric of Object.values(site.metrics)) {
       expect(metric.value).not.toBeNull(); expect(metric.status).toBe('nasa-derived');
     }
   });
-  it('keeps published reference coordinates inside valid bounds', () => {
+  it('distinguishes published coordinates from raster-center areas', () => {
+    expect(sites.filter((site) => site.coordinateBasis === 'published-research-point')).toHaveLength(3);
+    expect(sites.filter((site) => site.coordinateBasis === 'raster-footprint-center')).toHaveLength(3);
+  });
+  it('keeps all comparison coordinates inside valid bounds', () => {
     for (const site of sites) { expect(site.latitude).toBeGreaterThanOrEqual(-90); expect(site.latitude).toBeLessThanOrEqual(90); expect(site.longitude).toBeGreaterThanOrEqual(0); expect(site.longitude).toBeLessThan(360); }
   });
 });

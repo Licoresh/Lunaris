@@ -1,6 +1,6 @@
 # Map and simulation
 
-LUNARIS is available at `/lunaris`. The map offers historical sunlight, historical Earth visibility, elevation and slope layers. The terrain layers show six regional raster patches; the global polar averages cover the mapped south-polar area. Display previews are downsampled, so zooming changes view scale but adds no detail.
+LUNARIS is available at `/lunaris`. The map offers historical sunlight, historical Earth visibility, elevation and slope layers. All six terrain regions also have 3D meshes. Three comparison locations use published research coordinates; the other three use the centers of their LOLA raster footprints. The global polar averages cover the mapped south-polar area. Display previews are downsampled, so zooming changes view scale but adds no detail.
 
 Map data are generated from the local NASA GeoTIFFs with `python scripts/build_polar_map.py`. The script applies GeoTIFF scale and offset, converts visibility fractions to percentages, preserves NoData transparency, and writes PNG previews and `src/data/map-layers.json`.
 

@@ -14,9 +14,12 @@ ROOT = Path(__file__).resolve().parents[1]
 GRID_SIZE = 257
 SITE_METRICS = json.loads((ROOT / "src/data/site-metrics.json").read_text(encoding="utf-8"))
 PRODUCTS = {
-    "malapert-massif": ROOT / "data/nasa/terrain/Site23_final_adj_5mpp_surf.tif",
     "connecting-ridge": ROOT / "data/nasa/terrain/Site01_final_adj_5mpp_surf.tif",
     "shackleton-rim": ROOT / "data/nasa/terrain/Site04_final_adj_5mpp_surf.tif",
+    "nobile-rim-1": ROOT / "data/nasa/terrain/Site06_final_adj_5mpp_surf.tif",
+    "peak-near-shackleton": ROOT / "data/nasa/terrain/Site07_final_adj_5mpp_surf.tif",
+    "de-gerlache-rim": ROOT / "data/nasa/terrain/Site11_final_adj_5mpp_surf.tif",
+    "malapert-massif": ROOT / "data/nasa/terrain/Site23_final_adj_5mpp_surf.tif",
 }
 
 

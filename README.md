@@ -5,8 +5,8 @@ LUNARIS is an educational lunar south-pole terrain explorer built for the NASA S
 ## Features
 
 - Interactive south-polar map with historical sunlight and Earth-visibility layers, plus elevation and slope previews for six areas: Connecting Ridge, Shackleton Rim, Nobile Rim 1, Peak near Shackleton, de Gerlache Rim and Malapert Massif.
-- Map pan, zoom, layer selection, coverage exploration and 3D terrain views where regional models are available.
-- Site comparisons and an illustrative Sun/Earth window simulation. Simulation dates select a repeatable educational scenario; they are not date-specific ephemerides or forecasts.
+- Map pan, zoom, layer selection, coverage exploration and 3D terrain views for all six NASA raster regions.
+- Compare six areas and run an illustrative Sun/Earth window simulation. Three areas use published research coordinates; three use their terrain-raster footprint centers. Dates select a repeatable educational scenario, not a forecast.
 - PDF exports for comparison and simulation reports.
 
 ## Run locally
@@ -30,7 +30,7 @@ For a production build, run `npm run build` followed by `npm start`.
 
 ## Demo
 
-Start with the default polar map, switch through its four layers and choose a terrain coverage region. Use **Focus site** or open a site's 3D terrain where available. Inspect the site comparison and illustrative simulation, including its method and limits. See [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md) and [`docs/POLAR_MAP_SIMULATION.md`](docs/POLAR_MAP_SIMULATION.md) for walkthroughs and scientific limits.
+Start with the default polar map, switch through its four layers and choose one of six terrain areas. Open its 3D terrain, compare its measurements with another area, then run the illustrative simulation. The interface distinguishes published research coordinates from raster-center comparison areas. See [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md) and [`docs/POLAR_MAP_SIMULATION.md`](docs/POLAR_MAP_SIMULATION.md) for the walkthrough and limits.
 
 ## Checks
 
